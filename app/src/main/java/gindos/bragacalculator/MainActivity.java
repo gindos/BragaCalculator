@@ -1,31 +1,80 @@
 package gindos.bragacalculator;
 
+import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    protected Integer intSugar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        final EditText sugar = (EditText)findViewById(R.id.sugar);
+        sugar.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+
+                String strSugar = sugar.getText().toString();
+                if (strSugar.length() > 0) {
+                    intSugar = Integer.parseInt(strSugar);
+                } else {
+                    intSugar = 0;
+                }
+
+                TextView volumeSugar = (TextView)findViewById(R.id.volumeSugar);
+                volumeSugar.setText(String.format("%d", calcVolumeSugar()));
+
+                TextView volumeWater = (TextView)findViewById(R.id.volumeWater);
+                volumeWater.setText(String.format("%d", calcVolumeWater()));
+
+                TextView allVolume = (TextView)findViewById(R.id.allVolume);
+                allVolume.setText(String.format("%d", calcAllVolume()));
+
             }
         });
+
+    }
+
+    // расчёт объёма сахара
+    public int calcVolumeSugar() {
+        return (int)Math.round(intSugar / 1.587);
+    }
+
+    // расчёт объёма воды
+    public int calcVolumeWater() {
+        return intSugar * 5;
+    }
+
+    // расчёт общего объёма браги
+    public int calcAllVolume() {
+        return calcVolumeSugar() + calcVolumeWater();
     }
 
     @Override
@@ -35,18 +84,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
-    }
 }

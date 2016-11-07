@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Бражный калькулятор</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Настройки</string>
+    <string name="nameFieldSugar">Вес сахара</string>
+    <string name="nameButtonWeight">взвесить</string>
+    <string name="nameFieldVolumeSugar">Объём сахара</string>
+    <string name="nameFieldVolumeWater">Объём воды</string>
+    <string name="nameFieldAllVolume">Общий объём</string>
 </resources>
