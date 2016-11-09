@@ -1,9 +1,31 @@
 <resources>
     <string name="app_name">Бражный калькулятор</string>
     <string name="action_settings">Настройки</string>
-    <string name="nameFieldSugar">Вес сахара</string>
-    <string name="nameButtonWeight">взвесить</string>
-    <string name="nameFieldVolumeSugar">Объём сахара</string>
-    <string name="nameFieldVolumeWater">Объём воды</string>
-    <string name="nameFieldAllVolume">Общий объём</string>
+    <string name="action_about">О программе</string>
+    <string name="nameFieldSugar">Вес сахара (гр)</string>
+    <string name="nameButtonWeight">...</string>
+    <string name="nameFieldVolumeSugar">Объём сахара (мл)</string>
+    <string name="nameFieldVolumeWater">Объём воды (мл)</string>
+    <string name="nameFieldAllVolume">Общий объём (мл)</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="title_activity_about">О программе</string>
+    <string name="nameDryYeast">Сухие дрожжи</string>
+    <string name="nameCompressedYeast">Пресованные дрожжи</string>
+    <string name="nameDryYeastGr">Сухие дрожжи (гр)</string>
+    <string name="nameCompressedYeastGr">Пресованные дрожжи (гр)</string>
+    <string name="nameGidromodule">Гидромодуль</string>
+    <string name="nameButtonSaveSettings">Сохранить настройки</string>
+    <string name="messageSettingsSaved">Настройки успешно сохранены</string>
+    <string name="nameKarbamid">Карбамид (гр)</string>
+    <string name="nameMagniyaSulphat">Магния сульфат, семиводный (гр)</string>
+    <string name="nameNatriyaKhlorid">Натрия хлорид (гр)</string>
+    <string name="nameKaliyaKhlorid">Калия хлорид</string>
+    <string name="nameMargantsaSulphat">Марганца сульфат</string>
+    <string name="nameTsinkaSulphat">Цинка сульфат, семиводный</string>
+    <string name="nameKaliyMonophosphat">Калий монофосфат</string>
+    <string name="nameAktiveUgol">Активированный уголь</string>
+    <string name="nameMel">Мел</string>
+    <string name="nameOlivkovoeMaslo">Оливковое масло, 1 капля</string>
+    <string name="namePenogasitel">Печенье, порошок (пеногаситель)</string>
+    <string name="nameAllSoley">Всего солей</string>
 </resources>

@@ -26,27 +26,23 @@
 
             <TextView
                 android:text="@string/nameFieldSugar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView"
                 style="@style/nameField"/>
 
             <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-                android:ems="5"
                 android:id="@+id/sugar"
                 android:selectAllOnFocus="true"
                 android:textAllCaps="false"
-                style="@style/valueField" />
+                android:ems="3"
+                style="@style/editField" />
 
             <Button
                 android:text="@string/nameButtonWeight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:id="@+id/bWeightSugar"
-                android:layout_weight="1" />
+                android:minWidth="48dip" />
         </TableRow>
 
         <TableRow
@@ -55,17 +51,11 @@
 
             <TextView
                 android:text="@string/nameFieldVolumeSugar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView"
                 style="@style/nameField"/>
 
             <TextView
                 android:text=""
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/volumeSugar"
-                android:layout_span="2"
                 style="@style/valueField" />
 
         </TableRow>
@@ -76,17 +66,11 @@
 
             <TextView
                 android:text="@string/nameFieldVolumeWater"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView"
                 style="@style/nameField"/>
 
             <TextView
                 android:text=""
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/volumeWater"
-                android:layout_span="2"
                 style="@style/valueField" />
 
         </TableRow>
@@ -97,20 +81,210 @@
 
             <TextView
                 android:text="@string/nameFieldAllVolume"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView"
                 style="@style/nameField"/>
 
             <TextView
                 android:text=""
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/allVolume"
-                android:layout_span="2"
                 style="@style/valueField" />
 
         </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/fieldYeast"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/Yeast"
+                style="@style/valueField" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:text="@string/nameKarbamid"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/massKarbamid"
+                style="@style/valueField" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:text="@string/nameMagniyaSulphat"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/massMagniyaSulphat"
+                style="@style/valueField" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:text="@string/nameNatriyaKhlorid"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/massNatriyaKhlorid"
+                style="@style/valueField" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:text="@string/nameKaliyaKhlorid"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/massKaliyaKhlorid"
+                style="@style/valueField" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:text="@string/nameMargantsaSulphat"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/massMargantsaSulphat"
+                style="@style/valueField" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:text="@string/nameTsinkaSulphat"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/massTsinkaSulphat"
+                style="@style/valueField" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:text="@string/nameKaliyMonophosphat"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/massKaliyMonophosphat"
+                style="@style/valueField" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:text="@string/nameAktiveUgol"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/massAktiveUgol"
+                style="@style/valueField" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:text="@string/nameMel"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/massMel"
+                style="@style/valueField" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:text="@string/nameOlivkovoeMaslo"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/volumeOlivkovoeMaslo"
+                style="@style/valueField" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:text="@string/namePenogasitel"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/massPenogasitel"
+                style="@style/valueField" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:text="@string/nameAllSoley"
+                style="@style/nameField"/>
+
+            <TextView
+                android:text=""
+                android:id="@+id/massAllSoley"
+                style="@style/valueField" />
+
+        </TableRow>
+
 
         <!--
                 <TableRow
