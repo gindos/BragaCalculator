@@ -3,6 +3,7 @@ package gindos.bragacalculator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.DecimalFormat;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,9 +15,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences settingsApp;
     private Float allSoley;
     private Float tmpFloat;
+    private ListView listBraga;
+    private ArrayList<String> aBraga;
+    private ArrayAdapter<String> adapterBraga;
+    private Snackbar mSnackbar;
+    private String selectedItem;
+
 
 //    private final static String TAG = settingsActivity.class.getSimpleName();
 
@@ -38,11 +51,42 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        listBraga = (ListView)findViewById(R.id.listBraga);
+        this.aBraga = new ArrayList<String>();
+
+        adapterBraga = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aBraga);
+        listBraga.setAdapter(adapterBraga);
+        listBraga.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
+                                    long id) {
+                Toast.makeText(getApplicationContext(), ((TextView) itemClicked).getText(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        listBraga.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View itemClicked, int position,
+                                        long id) {
+                selectedItem = parent.getItemAtPosition(position).toString();
+
+                mSnackbar = Snackbar.make(parent, R.string.question_action_delete_braga, Snackbar.LENGTH_INDEFINITE)
+                        .setAction("Да", snackbarOnClickListener);
+                mSnackbar.show();
+
+                return true;
+            }
+        });
+
+/*
         // прочитаем настройки
         settingsApp = getSharedPreferences("settingsApp", MODE_PRIVATE);
         flagDryYeast = settingsApp.getBoolean("flagDryYeast", true);
         sizeGidromodule = settingsApp.getFloat("sizeGidromodule", 5);
+*/
 
+/*
         final EditText sugar = (EditText)findViewById(R.id.sugar);
         sugar.addTextChangedListener(new TextWatcher() {
             @Override
@@ -67,13 +111,45 @@ public class MainActivity extends AppCompatActivity {
                 calcAll();
             }
         });
+*/
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                long curTime = System.currentTimeMillis();
+
+                aBraga.add(0, String.format("%02d:%02d:%02d", curTime / 1000 / 3600, curTime / 1000 / 60 % 60, curTime / 1000 % 60));
+                adapterBraga.notifyDataSetChanged();
+/*
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+*/
+            }
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
+
+    View.OnClickListener snackbarOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            adapterBraga.remove(selectedItem);
+            adapterBraga.notifyDataSetChanged();
+
+            Toast.makeText(getApplicationContext(),
+                    "Рецепт " + selectedItem + " удалён.",
+                    Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
 
+/*
         if (settingsApp.contains("flagDryYeast")) {
             flagDryYeast = settingsApp.getBoolean("flagDryYeast", true);
         }
@@ -91,8 +167,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         calcAll();
+*/
     }
 
+/*
     // расчёт и вывод на экран всех величин
     public void calcAll() {
         TextView volumeSugar = (TextView)findViewById(R.id.volumeSugar);
@@ -255,6 +333,7 @@ public class MainActivity extends AppCompatActivity {
     public float calcMassPenogasitel() {
         return round((float)(intSugar / 1600), 2);
     }
+*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

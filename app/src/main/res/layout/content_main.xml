@@ -13,6 +13,14 @@
     tools:context="gindos.bragacalculator.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/listBraga" />
+
+<!--
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -284,18 +292,7 @@
                 style="@style/valueField" />
 
         </TableRow>
-
-
-        <!--
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-                </TableRow>
-        -->
     </TableLayout>
+-->
 
 </RelativeLayout>
