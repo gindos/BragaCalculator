@@ -1,12 +1,16 @@
 package gindos.bragacalculator;
 
+import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.DecimalFormat;
 import android.icu.text.SimpleDateFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -24,6 +28,8 @@ import android.widget.Toast;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapterBraga;
     private Snackbar mSnackbar;
     private String selectedItem;
+    private AlertDialog.Builder dialogDelBraga;
 
 
 //    private final static String TAG = settingsActivity.class.getSimpleName();
@@ -71,13 +78,35 @@ public class MainActivity extends AppCompatActivity {
                                         long id) {
                 selectedItem = parent.getItemAtPosition(position).toString();
 
-                mSnackbar = Snackbar.make(parent, R.string.question_action_delete_braga, Snackbar.LENGTH_INDEFINITE)
-                        .setAction("Да", snackbarOnClickListener);
-                mSnackbar.show();
+                dialogDelBraga.show();
 
                 return true;
             }
         });
+
+        dialogDelBraga = new AlertDialog.Builder(MainActivity.this);
+        dialogDelBraga.setTitle(R.string.titleActionDeleteBraga);
+        dialogDelBraga.setMessage(R.string.questionActionDeleteBraga);
+
+        dialogDelBraga.setPositiveButton(R.string.buttonYes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                adapterBraga.remove(selectedItem);
+                adapterBraga.notifyDataSetChanged();
+
+                Toast.makeText(getApplicationContext(),
+                        "Рецепт " + selectedItem + " удалён.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialogDelBraga.setNegativeButton(R.string.buttonNo, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
 
 /*
         // прочитаем настройки
@@ -115,11 +144,12 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                long curTime = System.currentTimeMillis();
-
-                aBraga.add(0, String.format("%02d:%02d:%02d", curTime / 1000 / 3600, curTime / 1000 / 60 % 60, curTime / 1000 % 60));
+                Date curTime = Calendar.getInstance().getTime();
+                curTime.toLocaleString();
+                aBraga.add(0, curTime.toString());
                 adapterBraga.notifyDataSetChanged();
 /*
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -130,20 +160,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
-
-    View.OnClickListener snackbarOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            adapterBraga.remove(selectedItem);
-            adapterBraga.notifyDataSetChanged();
-
-            Toast.makeText(getApplicationContext(),
-                    "Рецепт " + selectedItem + " удалён.",
-                    Toast.LENGTH_SHORT).show();
-        }
-    };
-
-
 
     @Override
     protected void onResume() {

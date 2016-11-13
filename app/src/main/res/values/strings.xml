@@ -28,5 +28,8 @@
     <string name="nameOlivkovoeMaslo">Оливковое масло, 1 капля</string>
     <string name="namePenogasitel">Печенье, порошок (пеногаситель)</string>
     <string name="nameAllSoley">Всего солей</string>
-    <string name="question_action_delete_braga">Вы точно хотите удалить этот рецепт?</string>
+    <string name="titleActionDeleteBraga">Запрос на удаление рецепта</string>
+    <string name="questionActionDeleteBraga">Вы точно хотите удалить этот рецепт?</string>
+    <string name="buttonYes">Да</string>
+    <string name="buttonNo">Нет</string>
 </resources>
