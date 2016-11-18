@@ -1,9 +1,13 @@
 package gindos.bragacalculator;
 
 import android.annotation.TargetApi;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DecimalFormat;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
@@ -16,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,13 +48,15 @@ public class MainActivity extends AppCompatActivity {
     private Float tmpFloat;
     private ListView listBraga;
     private ArrayList<String> aBraga;
-    private ArrayAdapter<String> adapterBraga;
     private Snackbar mSnackbar;
-    private String selectedItem;
+    private long selectedItem;
     private AlertDialog.Builder dialogDelBraga;
+    private classdbReceptsBraga dbReceptsBraga;
+    private SQLiteDatabase db;
+    private Cursor cursorRecepts;
+    private SimpleCursorAdapter adapterBraga;
 
-
-//    private final static String TAG = settingsActivity.class.getSimpleName();
+    private final static String TAG = settingsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +67,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         listBraga = (ListView)findViewById(R.id.listBraga);
-        this.aBraga = new ArrayList<String>();
-
-        adapterBraga = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, aBraga);
-        listBraga.setAdapter(adapterBraga);
         listBraga.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
@@ -74,9 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
         listBraga.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View itemClicked, int position,
-                                        long id) {
-                selectedItem = parent.getItemAtPosition(position).toString();
+            public boolean onItemLongClick(AdapterView<?> parent, View itemClicked, int position, long id) {
+                selectedItem = parent.getItemIdAtPosition(position);
 
                 dialogDelBraga.show();
 
@@ -91,12 +94,21 @@ public class MainActivity extends AppCompatActivity {
         dialogDelBraga.setPositiveButton(R.string.buttonYes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                adapterBraga.remove(selectedItem);
-                adapterBraga.notifyDataSetChanged();
+                if (db.delete(dbReceptsBraga.TABLE_NAME_RECEPTS, dbReceptsBraga.COLUMN_ID + " = " + Long.toString(selectedItem), null) > 0 ) {
+                    cursorRecepts = db.rawQuery("select "
+                            + dbReceptsBraga.COLUMN_ID + ", "
+                            + dbReceptsBraga.COLUMN_NAME + ", "
+                            + "strftime('%d.%m.%Y %H:%M:%S', "
+                            + dbReceptsBraga.COLUMN_DATE_TIME
+                            + ", 'unixepoch') as "
+                            + dbReceptsBraga.COLUMN_DATE_TIME
+                            + " from " + dbReceptsBraga.TABLE_NAME_RECEPTS, null);
+                    adapterBraga.changeCursor(cursorRecepts);
 
-                Toast.makeText(getApplicationContext(),
-                        "Рецепт " + selectedItem + " удалён.",
-                        Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            "Рецепт #" + Long.toString(selectedItem) + " удалён.",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -106,6 +118,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        dbReceptsBraga = new classdbReceptsBraga(getApplicationContext());
+
+
 
 
 /*
@@ -147,14 +163,45 @@ public class MainActivity extends AppCompatActivity {
             @TargetApi(Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                Date curTime = Calendar.getInstance().getTime();
-                curTime.toLocaleString();
-                aBraga.add(0, curTime.toString());
-                adapterBraga.notifyDataSetChanged();
-/*
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-*/
+
+                LayoutInflater li = LayoutInflater.from(MainActivity.this);
+                View dialogView = li.inflate(R.layout.dialog_new_recept, null);
+                AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                mDialogBuilder.setView(dialogView);
+                final EditText userInput = (EditText) dialogView.findViewById(R.id.nameNewRecept);
+
+                mDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.buttonYes,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        long  curTimeMillis = System.currentTimeMillis();
+                                        ContentValues cv = new ContentValues();
+
+                                        cv.put(dbReceptsBraga.COLUMN_NAME, userInput.getText().toString());
+                                        cv.put(dbReceptsBraga.COLUMN_DATE_TIME, curTimeMillis / 1000);
+
+                                        if (db.insert(dbReceptsBraga.TABLE_NAME_RECEPTS, null, cv) > 0) {
+                                            cursorRecepts = db.rawQuery("select "
+                                                    + dbReceptsBraga.COLUMN_ID + ", "
+                                                    + dbReceptsBraga.COLUMN_NAME + ", "
+                                                    + "strftime('%d.%m.%Y %H:%M:%S', "
+                                                    + dbReceptsBraga.COLUMN_DATE_TIME
+                                                    + ", 'unixepoch') as "
+                                                    + dbReceptsBraga.COLUMN_DATE_TIME
+                                                    + " from " + dbReceptsBraga.TABLE_NAME_RECEPTS, null);
+                                            adapterBraga.changeCursor(cursorRecepts);
+                                        }
+                                    }
+                                })
+                        .setNegativeButton(R.string.buttonNo,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                AlertDialog alertDialog = mDialogBuilder.create();
+                alertDialog.show();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -164,6 +211,34 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        db = dbReceptsBraga.getWritableDatabase();
+
+        cursorRecepts = db.rawQuery("select "
+                + dbReceptsBraga.COLUMN_ID + ", "
+                + dbReceptsBraga.COLUMN_NAME + ", "
+                + "strftime('%d.%m.%Y %H:%M:%S', "
+                + dbReceptsBraga.COLUMN_DATE_TIME
+                + ", 'unixepoch') as "
+                + dbReceptsBraga.COLUMN_DATE_TIME
+                + " from " + dbReceptsBraga.TABLE_NAME_RECEPTS, null);
+
+        adapterBraga = new SimpleCursorAdapter(this,
+                R.layout.list_recepts,
+                cursorRecepts,
+                new String[] {dbReceptsBraga.COLUMN_NAME, dbReceptsBraga.COLUMN_DATE_TIME},
+                new int[] {R.id.columnName, R.id.columnDateTime},
+                0);
+/*
+        adapterBraga = new SimpleCursorAdapter(this,
+                android.R.layout.two_line_list_item,
+                cursorRecepts,
+                headers,
+                new int[]{android.R.id.text1, android.R.id.text2},
+                0);
+*/
+
+        listBraga.setAdapter(adapterBraga);
 
 /*
         if (settingsApp.contains("flagDryYeast")) {
@@ -186,6 +261,12 @@ public class MainActivity extends AppCompatActivity {
 */
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        db.close();
+        cursorRecepts.close();
+    }
 /*
     // расчёт и вывод на экран всех величин
     public void calcAll() {
