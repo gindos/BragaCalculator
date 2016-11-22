@@ -46,15 +46,15 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences settingsApp;
     private Float allSoley;
     private Float tmpFloat;
-    private ListView listBraga;
+    private ListView listRecepts;
     private ArrayList<String> aBraga;
     private Snackbar mSnackbar;
     private long selectedItem;
-    private AlertDialog.Builder dialogDelBraga;
+    private AlertDialog.Builder dialogDelRecept;
     private classdbReceptsBraga dbReceptsBraga;
     private SQLiteDatabase db;
     private Cursor cursorRecepts;
-    private SimpleCursorAdapter adapterBraga;
+    public SimpleCursorAdapter adapterBraga;
 
     private final static String TAG = settingsActivity.class.getSimpleName();
 
@@ -66,32 +66,34 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        listBraga = (ListView)findViewById(R.id.listBraga);
-        listBraga.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listRecepts = (ListView)findViewById(R.id.listRecepts);
+
+        // открываем форму редактирования рецепта
+        listRecepts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
-                                    long id) {
-                Toast.makeText(getApplicationContext(), ((TextView) itemClicked).getText(),
-                        Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
+                Intent intentEditRecept = new Intent(MainActivity.this, editReceptActivity.class);
+                startActivity(intentEditRecept);
             }
         });
 
-        listBraga.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        // при длинном нажатии показываем диалог с запросом на удаление рецепта
+        listRecepts.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View itemClicked, int position, long id) {
                 selectedItem = parent.getItemIdAtPosition(position);
-
-                dialogDelBraga.show();
-
+                dialogDelRecept.show();
                 return true;
             }
         });
 
-        dialogDelBraga = new AlertDialog.Builder(MainActivity.this);
-        dialogDelBraga.setTitle(R.string.titleActionDeleteBraga);
-        dialogDelBraga.setMessage(R.string.questionActionDeleteBraga);
+        // создаем диалог с запросом на удаление рецепта
+        dialogDelRecept = new AlertDialog.Builder(MainActivity.this);
+        dialogDelRecept.setTitle(R.string.titleActionDeleteBraga);
+        dialogDelRecept.setMessage(R.string.questionActionDeleteBraga);
 
-        dialogDelBraga.setPositiveButton(R.string.buttonYes, new DialogInterface.OnClickListener() {
+        // в диалоге с запросом на удаление рецепта нажали ДА
+        dialogDelRecept.setPositiveButton(R.string.buttonYes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (db.delete(dbReceptsBraga.TABLE_NAME_RECEPTS, dbReceptsBraga.COLUMN_ID + " = " + Long.toString(selectedItem), null) > 0 ) {
@@ -100,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                             + dbReceptsBraga.COLUMN_NAME + ", "
                             + "strftime('%d.%m.%Y %H:%M:%S', "
                             + dbReceptsBraga.COLUMN_DATE_TIME
-                            + ", 'unixepoch') as "
+                            + ", 'unixepoch', 'localtime') as "
                             + dbReceptsBraga.COLUMN_DATE_TIME
                             + " from " + dbReceptsBraga.TABLE_NAME_RECEPTS, null);
                     adapterBraga.changeCursor(cursorRecepts);
@@ -112,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        dialogDelBraga.setNegativeButton(R.string.buttonNo, new DialogInterface.OnClickListener() {
+        // в диалоге с запросом на удаление рецепта нажали НЕТ
+        dialogDelRecept.setNegativeButton(R.string.buttonNo, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -187,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                                                     + dbReceptsBraga.COLUMN_NAME + ", "
                                                     + "strftime('%d.%m.%Y %H:%M:%S', "
                                                     + dbReceptsBraga.COLUMN_DATE_TIME
-                                                    + ", 'unixepoch') as "
+                                                    + ", 'unixepoch', 'localtime') as "
                                                     + dbReceptsBraga.COLUMN_DATE_TIME
                                                     + " from " + dbReceptsBraga.TABLE_NAME_RECEPTS, null);
                                             adapterBraga.changeCursor(cursorRecepts);
@@ -219,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
                 + dbReceptsBraga.COLUMN_NAME + ", "
                 + "strftime('%d.%m.%Y %H:%M:%S', "
                 + dbReceptsBraga.COLUMN_DATE_TIME
-                + ", 'unixepoch') as "
+                + ", 'unixepoch', 'localtime') as "
                 + dbReceptsBraga.COLUMN_DATE_TIME
                 + " from " + dbReceptsBraga.TABLE_NAME_RECEPTS, null);
 
@@ -238,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                 0);
 */
 
-        listBraga.setAdapter(adapterBraga);
+        listRecepts.setAdapter(adapterBraga);
 
 /*
         if (settingsApp.contains("flagDryYeast")) {

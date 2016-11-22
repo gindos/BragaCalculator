@@ -33,7 +33,8 @@
     <string name="buttonYes">Да</string>
     <string name="buttonNo">Нет</string>
     <string name="headerDialogNewRecept">Название нового рецепта браги</string>
-<!--
+    <string name="title_activity_edit_recept">editReceptActivity</string>
+    <!--
     <string name="buttonCreate">Создать</string>
     <string name="buttonCancel">Отменить</string>
 -->
